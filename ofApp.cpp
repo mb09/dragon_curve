@@ -45,7 +45,7 @@ void ofApp::draw(){
     for(int i=0;i<curves.size();i++)
     {
         ofColor c;
-        c.setHsb(220 * i / ((float)curves.size()-1),255,255, ofClamp(255 * 20000 / (float)curves.size(),1,255));
+        c.setHsb(220 * i / ((float)curves.size()-1),255,255, ofClamp(255 * 50000 / (float)curves.size(),1,255));
         ofSetColor(c);
         curves[i]->draw();
     }
@@ -94,7 +94,7 @@ void ofApp::keyPressed(int key){
         curves.clear();
         c = new Curve(ofVec2f(ofGetWidth()*0.25, ofGetHeight() * 0.5), ofVec2f( ofGetWidth()*0.75, ofGetHeight()* 0.5));
         curves.push_back(c);
-        angle = ofRandom(360);
+        angle = ofRandom(10, 350);
         split_fraction = ofRandom(1.2,2);
         
         cout<<angle<<" "<<split_fraction<<endl;
