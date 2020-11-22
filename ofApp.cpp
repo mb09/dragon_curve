@@ -9,6 +9,8 @@ float split_fraction;
 float lastTime;
 int lastRefresh = -1;
 
+float minX, minY, maxX, maxY;
+
 //--------------------------------------------------------------
 void ofApp::setup(){
     keyPressed('1');
@@ -33,6 +35,13 @@ void ofApp::draw(){
     ofBackground(0);
     ofSetColor(255);
     ofSetLineWidth(2);
+    glPushMatrix();
+    float scaleX = (float)(ofGetWidth()) / (maxX - minX);
+    float scaleY = (float)(ofGetHeight()) / (maxY - minY);
+    float scale = scaleX < scaleY ? scaleX : scaleY;
+    glScalef(scale, scale, scale);
+
+    glTranslatef(-minX, -minY, 0);
     for(int i=0;i<curves.size();i++)
     {
         ofColor c;
@@ -41,8 +50,7 @@ void ofApp::draw(){
         curves[i]->draw();
     }
     
-    ofSetColor(255);
-    ofNoFill();
+    glPopMatrix();
 }
 
 void ofApp::split()
@@ -55,8 +63,18 @@ void ofApp::split()
         cc = cc->next;
     }
     cout<<curves.size()<<endl;
+    cout<<minX<<" "<< minY<<" "<<maxX<<" "<<maxY<<endl;
+
+    minX = 99999;
+    minY = 99999;
+    maxX = -99999;
+    maxY = -99999;
     for(int i=0;i<curves.size();i++)
     {
+        if(curves[i]->pts[0].x < minX) minX = curves[i]->pts[0].x;
+        if(curves[i]->pts[0].y < minY) minY = curves[i]->pts[0].y;
+        if(curves[i]->pts[0].x > maxX) maxX = curves[i]->pts[0].x;
+        if(curves[i]->pts[0].y > maxY) maxY = curves[i]->pts[0].y;
         curves[i]->split(angle, split_fraction);
     }
 }
